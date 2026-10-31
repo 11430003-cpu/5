@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>第五幕｜一碗茶的真相</title>
+<style>
+:root{color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:#03060f;color:#fff;overflow-x:hidden}
+body{font-family:"DFKai-SB","標楷體","BiauKai","Kaiti TC","KaiTi","STKaiti",serif;font-size:clamp(24px,6.4vw,32px);line-height:1.8}
+.bg{position:fixed;inset:0;z-index:-1;background:linear-gradient(#070d20,#02040a)}
+.bg:before,.bg:after{content:"";position:absolute;inset:-20%;animation:dr 16s ease-in-out infinite alternate}
+.bg:before{background:radial-gradient(ellipse at 25% 20%,rgba(90,130,230,.38),transparent 55%)}
+.bg:after{background:radial-gradient(ellipse at 80% 82%,rgba(214,160,80,.2),transparent 50%);animation-duration:21s;animation-direction:alternate-reverse}
+@keyframes dr{to{transform:translate(8%,6%) scale(1.15)}}
+.vg{position:fixed;inset:0;pointer-events:none;box-shadow:inset 0 0 170px rgba(0,0,0,.75);z-index:1}
+#st{min-height:100dvh;padding:calc(60px + env(safe-area-inset-top,0px)) 24px 130px;max-width:520px;margin:0 auto;transition:opacity .55s}
+#st.off{opacity:0}
+.tx{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:calc(100dvh - 200px - env(safe-area-inset-top,0px))}
+.ln{display:block;margin:.3em 0;opacity:0;filter:blur(7px);transform:translateY(16px);transition:opacity 1.7s ease,filter 1.7s ease,transform 1.7s ease;text-shadow:0 0 18px rgba(130,165,255,.45)}
+.ln.on{opacity:1;filter:none;transform:none}
+.ttl .ln{font-size:1.2em;letter-spacing:.12em}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:6;pointer-events:none;padding:20px 22px calc(18px + env(safe-area-inset-bottom,0px));display:flex;justify-content:flex-end}
+.go{font:inherit;color:#fff;background:none;border:0;padding:12px 6px;min-height:56px;letter-spacing:.1em;cursor:pointer;opacity:0;pointer-events:none;transition:opacity 1.2s}
+.go.show{opacity:1;pointer-events:auto;animation:br 2.6s ease-in-out infinite}
+.go:active,.go.show:active{opacity:.6}
+@keyframes br{50%{filter:brightness(1.18)}}
+@media (prefers-reduced-motion:reduce){.ln,#st{transition-duration:.01s}.bg:before,.bg:after{animation:none}}
+</style></head><body><div class="bg"></div><div class="vg"></div><div id="st"></div>
+<script>
+var F=document.getElementById("st"),tk=0,tm,p=0,
+/* 劇情頁：ps=逐行文字；auto=毫秒，到時自動淡出；b=按鈕文字（預設「下一頁」） */
+P=[{ttl:1,ps:["第五幕","一碗茶的真相"]},
+{ps:["走過牡丹車站、三貂嶺與雙溪老街","我終於將一路上的線索串連起來"],auto:10000},
+{ps:["原來","真正被我忽略的","不只是他們的謊言","還有自己曾經放棄的人生"],auto:10000},
+{ps:["我拿出一路收集的線索","決定親自面對曾經傷害我的人"],auto:10000},
+{ps:["這一次","我不再為了愛情犧牲自己","也不再讓別人決定我的命運"],auto:10000},
+{ps:["坐在茶桌前","我終於明白","真正屬於我的一切","不只是家產","更是選擇人生的權利"]},
+{ps:["重生一次，我要親手改寫結局！這一世，我的人生由我作主！"]},
+{ttl:1,end:1,ps:["恭喜你找出真相","完成今天的神秘之旅！"]}];
+/* 依標點斷句，依句尾標點決定停頓長短 */
+function mk(ps){var out=[];ps.forEach(function(t){var pc=[];
+(t.match(/[^。！？；]+[。！？；]*[」』]?/g)||[t]).forEach(function(x){
+if(x.length>18){var c="";(x.match(/[^，、]+[，、]?/g)||[x]).forEach(function(y){if(c&&(c+y).length>18){pc.push(c);c=y}else c+=y});if(c)pc.push(c)}else pc.push(x)});
+pc.forEach(function(x,i){var ch=x.replace(/[」』]/g,"").slice(-1),d=({"。":1500,"！":1300,"？":1800,"；":1200,"，":850,"、":750,"…":1900,"—":1900})[ch]||1000;
+d+=x.length*45;if(i==pc.length-1)d+=800;out.push({s:x,d:d})})});return out}
+function nx(){if(p<P.length-1)show(p+1)}
+function show(n){tk++;clearTimeout(tm);F.classList.add("off");setTimeout(function(){p=n;window.scrollTo(0,0);T(P[n]);F.classList.remove("off")},600)}
+function dock(b){return '<div class="dock"><button class="go" id="go" onclick="this.disabled=true;nx()">◎'+b+"</button></div>"}
+function btn(d){setTimeout(function(){var g=document.getElementById("go");if(g)g.classList.add("show")},d)}
+function T(s){var ps=s.ps;
+var L=mk(ps),my=tk,t0=Date.now();
+F.innerHTML='<div class="tx'+(s.ttl?" ttl":"")+'" id="tx">'+L.map(function(l){return '<span class="ln">'+l.s+"</span>"}).join("")+"</div>"+(s.auto||s.end?"":dock(s.b||"下一頁"));
+var E=F.querySelectorAll(".ln");
+function run(i){if(my!=tk)return;if(i>=E.length){if(s.auto)tm=setTimeout(function(){if(my==tk)show(p+1)},Math.max(1500,s.auto-(Date.now()-t0)));else btn(700);return}E[i].classList.add("on");tm=setTimeout(function(){run(i+1)},L[i].d)}
+if(!s.auto)document.getElementById("tx").onclick=function(){clearTimeout(tm);E.forEach(function(e){e.classList.add("on")});btn(500)};
+run(0)}
+
+show(0);
+</script></body></html>
